@@ -1315,43 +1315,45 @@
         <div class="download-heading">
           <span class="section-kicker">Download</span>
           <h2 class="section-title" id="download-title">下载 PS ChatGPT Bridge</h2>
-          <p>一次下载，Bridge、Photoshop 插件和 Chrome 扩展全部包含。</p>
+          <p>2026-09-10 更新：同一 ChatGPT 对话中修缮多份 PS 文件，返图自动回到对应文件及原坐标。</p>
         </div>
 
         <div class="download-panel">
           <div class="platform-tabs" role="tablist" aria-label="系统选择">
-            <button class="platform-tab is-active" type="button" role="tab" aria-selected="true">macOS</button>
-            <button class="platform-tab" type="button" role="tab" aria-selected="false" disabled>Windows · 即将支持</button>
+            <button class="platform-tab is-active" type="button" role="tab" aria-selected="true" data-platform="mac">macOS</button>
+            <button class="platform-tab" type="button" role="tab" aria-selected="false" data-platform="windows">Windows</button>
           </div>
 
           <div class="download-body">
             <div id="download-system-note" class="system-note">已为你选择 macOS</div>
 
             <fieldset class="chip-options">
-              <legend>你的 Mac 使用哪种芯片？</legend>
+              <legend id="chip-legend">你的 Mac 使用哪种芯片？</legend>
 
               <label class="chip-option">
                 <input type="radio" name="mac-chip" value="arm64" checked />
-                <span class="chip-name">Apple Silicon <span class="chip-detail">M1 / M2 / M3 / M4 / M5</span></span>
+                <span class="chip-name" id="arm-chip-name">Apple Silicon <span class="chip-detail">M1 / M2 / M3 / M4 / M5</span></span>
                 <span class="recommended-chip">推荐</span>
               </label>
 
               <label class="chip-option">
                 <input type="radio" name="mac-chip" value="x64" />
-                <span class="chip-name">Intel <span class="chip-detail">Intel Processor</span></span>
+                <span class="chip-name" id="x64-chip-name">Intel <span class="chip-detail">Intel Processor</span></span>
               </label>
             </fieldset>
 
             <button id="download-button" class="button button-primary download-button" type="button">↓ 下载 macOS 版</button>
-            <p id="download-meta" class="download-meta">Version 1.0.0 · Apple Silicon · macOS 12+</p>
+            <p id="download-meta" class="download-meta">Version 1.0.0 · 2026-09-10 · Apple Silicon · macOS 12+</p>
 
             <div class="bundle">
-              <p class="bundle-title">一个安装包已包含</p>
+              <p class="bundle-title">一个 ZIP 包已包含</p>
               <div class="bundle-items">
                 <span class="bundle-item">Bridge 桌面应用</span>
                 <span class="bundle-item">Photoshop 插件</span>
                 <span class="bundle-item">Chrome 扩展</span>
               </div>
+              <p class="download-meta"><a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20260910/PS-ChatGPT-Bridge-Chrome.zip">单独下载 Chrome 扩展</a> · <a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20260910/PS-ChatGPT-Bridge.ccx">单独下载 PS 插件</a> · <a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/tag/v1.0.0-20260910">更新说明与全部下载</a></p>
+              <p class="download-meta">解压后按安装说明更新三端。已安装的 Chrome 扩展替换文件后需要重新加载。</p>
             </div>
           </div>
         </div>
@@ -1359,7 +1361,7 @@
     </section>
   </main>
 
-  <footer>PS ChatGPT Bridge · Version 1.0</footer>
+  <footer>PS ChatGPT Bridge · Version 1.0.0 · 更新于 2026-09-10</footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -1369,9 +1371,9 @@
     const downloadSystemNote = document.querySelector('#download-system-note');
     const downloadButton = document.querySelector('#download-button');
     const downloadMeta = document.querySelector('#download-meta');
-    const toast = document.querySelector('#toast');
     const demoWindow = document.querySelector('.demo-window');
-    let toastTimer;
+    const releaseBase = 'https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20260910/';
+    let selectedPlatform = 'mac';
 
     function detectPlatform() {
       const source = [
@@ -1394,19 +1396,29 @@
 
     function selectChip(value) {
       const isIntel = value === 'x64';
-      downloadButton.textContent = isIntel ? '↓ 下载 Intel 版' : '↓ 下载 macOS 版';
-      downloadMeta.textContent = isIntel
-        ? 'Version 1.0.0 · Intel · macOS 12+'
-        : 'Version 1.0.0 · Apple Silicon · macOS 12+';
+      const platform = selectedPlatform === 'mac' ? 'macOS' : 'Windows';
+      const chip = selectedPlatform === 'mac' ? (isIntel ? 'Intel' : 'Apple Silicon') : (isIntel ? 'x64' : 'ARM64');
+      downloadButton.textContent = '↓ 下载 ' + platform + ' ' + chip + ' 完整包';
+      downloadMeta.textContent = 'Version 1.0.0 · 2026-09-10 · ' + chip + ' · ' + (selectedPlatform === 'mac' ? 'macOS 12+' : 'Windows 10 / 11 便携版');
+      downloadButton.dataset.downloadUrl = releaseBase + 'PS-ChatGPT-Bridge-1.0.0-20260910-' + selectedPlatform + '-' + value + '-bundle.zip';
     }
 
-    function showPrototypeNotice() {
-      window.clearTimeout(toastTimer);
-      toast.textContent = '本地原型：尚未绑定正式安装包';
-      toast.classList.add('is-visible');
-      toastTimer = window.setTimeout(function () {
-        toast.classList.remove('is-visible');
-      }, 2600);
+    function selectPlatform(value) {
+      selectedPlatform = value;
+      const isMac = value === 'mac';
+      document.querySelectorAll('[data-platform]').forEach(function (tab) {
+        const active = tab.dataset.platform === value;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-selected', String(active));
+      });
+      document.querySelector('#chip-legend').textContent = isMac ? '你的 Mac 使用哪种芯片？' : '你的 Windows 使用哪种处理器？';
+      document.querySelector('#arm-chip-name').textContent = isMac ? 'Apple Silicon · M 系列' : 'ARM64 · Snapdragon 等 ARM 处理器';
+      document.querySelector('#x64-chip-name').textContent = isMac ? 'Intel' : 'x64 · Intel / AMD';
+      document.querySelector('.recommended-chip').hidden = !isMac;
+      const chip = isMac ? 'arm64' : 'x64';
+      document.querySelector('input[value="' + chip + '"]').checked = true;
+      downloadSystemNote.textContent = isMac ? '已为你选择 macOS' : '已为你选择 Windows 便携版';
+      selectChip(chip);
     }
 
     function replayDemo() {
@@ -1433,13 +1445,13 @@
       heroDownloadLabel.textContent = '选择下载版本';
 
       if (platform === 'windows') {
-        systemRecommendation.textContent = 'Windows 版即将支持';
-        downloadSystemNote.textContent = 'Windows 版即将支持；当前可下载 macOS 版';
+        systemRecommendation.textContent = '已为你推荐 Windows';
+        selectPlatform('windows');
         return;
       }
 
       systemRecommendation.textContent = '请选择适合你的版本';
-      downloadSystemNote.textContent = '当前提供 macOS 版本';
+      downloadSystemNote.textContent = '请选择 macOS 或 Windows';
     }
 
     document.querySelectorAll('[data-download-route]').forEach(function (button) {
@@ -1456,8 +1468,14 @@
     document.querySelectorAll('.demo-control').forEach(function (button) {
       button.addEventListener('click', replayDemo);
     });
-    downloadButton.addEventListener('click', showPrototypeNotice);
+    document.querySelectorAll('[data-platform]').forEach(function (tab) {
+      tab.addEventListener('click', function () { selectPlatform(tab.dataset.platform); });
+    });
+    downloadButton.addEventListener('click', function () {
+      window.location.assign(downloadButton.dataset.downloadUrl);
+    });
 
+    selectChip('arm64');
     applyPlatformRecommendation();
     demoWindow.classList.add('is-replaying');
   </script>

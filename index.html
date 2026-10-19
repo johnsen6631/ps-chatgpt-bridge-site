@@ -1063,7 +1063,7 @@
           <div class="dl-intro">
             <h3 id="download-platform-title">为 macOS 准备的完整套件</h3>
             <p id="download-platform-copy">支持 macOS 12 及以上版本。一个下载入口包含完整安装套件。</p>
-            <div class="suite-note"><b>包含：</b>Bridge 桌面应用、Photoshop 插件、Chrome 扩展，装完即可用。</div>
+            <div class="suite-note"><b>2026-10-19 修复版：</b>已修复 ChatGPT 生成图无法回填 Photoshop 的问题；包含 Bridge 桌面应用、Photoshop 插件和 Chrome 扩展。</div>
           </div>
 
           <div>
@@ -1082,9 +1082,9 @@
             </div>
 
             <button class="btn btn-primary" type="button" id="download-button">↓ 下载 macOS Apple Silicon 完整包</button>
-            <p class="dl-meta" id="download-meta">Version 1.0.0 · 2026-09-10<br/>Apple Silicon · macOS 12+</p>
+            <p class="dl-meta" id="download-meta">Version 1.0.0 · 2026-10-19<br/>Apple Silicon · macOS 12+</p>
             <p class="system-note" id="download-system-note">已为你选择 macOS</p>
-            <p class="release-links"><a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20260910/PS-ChatGPT-Bridge-Chrome.zip">单独下载 Chrome 扩展</a> · <a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20260910/PS-ChatGPT-Bridge.ccx">单独下载 PS 插件</a><br/><a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/tag/v1.0.0-20260910">更新说明与全部下载</a></p>
+            <p class="release-links"><a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20261019/PS-ChatGPT-Bridge-Chrome.zip">单独下载 Chrome 扩展</a> · <a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20261019/PS-ChatGPT-Bridge.ccx">单独下载 PS 插件</a><br/><a href="https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/tag/v1.0.0-20261019">更新说明与全部下载</a></p>
           </div>
         </div>
       </div>
@@ -1171,7 +1171,7 @@
     }
 
     /* ---------- 平台与芯片选择 → 更新真实下载 ---------- */
-    var releaseBase = 'https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20260910/';
+    var releaseBase = 'https://github.com/johnsen6631/ps-chatgpt-bridge-site/releases/download/v1.0.0-20261019/';
     var selectedPlatform = 'mac';
     var systemNote = document.getElementById('download-system-note');
     var downloadButton = document.getElementById('download-button');
@@ -1189,8 +1189,8 @@
         : (selectedChip === 'x64' ? 'x64' : 'ARM64');
       var platform = isMac ? 'macOS' : 'Windows';
       downloadButton.textContent = '↓ 下载 ' + platform + ' ' + chip + ' 完整包';
-      downloadButton.dataset.downloadUrl = releaseBase + 'PS-ChatGPT-Bridge-1.0.0-20260910-' + selectedPlatform + '-' + selectedChip + '-bundle.zip';
-      downloadMeta.innerHTML = 'Version 1.0.0 · 2026-09-10<br/>' + chip + ' · ' + (isMac ? 'macOS 12+' : 'Windows 10 / 11 便携版');
+      downloadButton.dataset.downloadUrl = releaseBase + 'PS-ChatGPT-Bridge-1.0.0-20261019-' + selectedPlatform + '-' + selectedChip + '-bundle.zip';
+      downloadMeta.innerHTML = 'Version 1.0.0 · 2026-10-19<br/>' + chip + ' · ' + (isMac ? 'macOS 12+' : 'Windows 10 / 11 便携版');
     }
 
     function selectPlatform(platform) {
